@@ -56,7 +56,7 @@ contract MyERC20WithVotes is ERC20, ERC20Detailed("A Gov Token ", "MyToken", 18)
 
     // 获取某高度对应的对应投票数
     function getPriorVotes(address account, uint blockNumber) public view returns (uint) {
-        require(blockNumber < block.number, "Nova::getPriorVotes: not yet determined");
+        require(blockNumber < block.number, "getPriorVotes: not yet determined");
 
         uint nCheckpoints = numCheckpoints[account];
         if (nCheckpoints == 0) {

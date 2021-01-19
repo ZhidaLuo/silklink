@@ -7,11 +7,11 @@ contract VoteByStake {
 
   IERC20 public immutable myToken;
 
-  mapping(address => uint) balances;
+  mapping(address => uint) public balances;
 
   uint public proposalCount;
 
-  event ProposalCreated(uint id, address proposer, address[] targets, uint[] values, string[] signatures, bytes[] calldatas, uint startBlock, uint endTs);
+  event ProposalCreated(uint id, address proposer, address[] targets, uint[] values, string[] signatures, bytes[] calldatas, uint startBlock, uint endBlock);
   event VoteCast(address voter, uint proposalId, bool support, uint votes);
   event ProposalExecuted(uint id, uint eta);
 
@@ -24,7 +24,7 @@ contract VoteByStake {
     string[] signatures;
     bytes[] calldatas;
     uint startBlock;
-    uint endTs;
+    uint endBlock;
     uint forVotes;
     uint againstVotes;
     bool executed;
@@ -54,6 +54,25 @@ contract VoteByStake {
     myToken = token;
   }
 
+  function stake(uint amount) public {
+    require(myToken.transferFrom(msg.sender, address(this), amount), "E/transfer Error");
+    balances[msg.sender] += amount;
+  }
+
+  function exit(uint amount) public {
+    Proposal storage proposal = proposals[proposalCount];
+    Receipt storage receipt = proposal.receipts[msg.sender];
+    if(receipt.hasVoted) {
+      receipt.votes -= amount;
+      if (receipt.support) {
+        proposal.forVotes -=  amount;      
+      } else {
+        proposal.againstVotes -= amount;
+      }
+    }
+    myToken.transfer(msg.sender, amount);
+  }
+
   // 提案（提交执行对象与动作）
   function propose(address[] memory targets, uint[] memory values, string[] memory signatures, bytes[] memory calldatas) public returns (uint) {
       require(proposalCount == 0 || state(proposalCount) > ProposalState.Active, "Wait last Proposal end");
@@ -61,8 +80,8 @@ contract VoteByStake {
       require(targets.length == values.length && targets.length == signatures.length && targets.length == calldatas.length, "Governor::propose: proposal function information arity mismatch");
       require(targets.length != 0, "Governor::propose: must provide actions");
 
-      uint startBlock = block.number + 1;
-      uint endTs = block.timestamp + 7 days;
+      uint startBlock = block.number;
+      uint endBlock = startBlock + 5;
 
       proposalCount++;
 
@@ -75,12 +94,12 @@ contract VoteByStake {
       newProposal.signatures = signatures;
       newProposal.calldatas = calldatas;
       newProposal.startBlock = startBlock;
-      newProposal.endTs = endTs;
+      newProposal.endBlock = endBlock;
       newProposal.forVotes = 0;
       newProposal.againstVotes = 0;
       newProposal.executed = false;
 
-      emit ProposalCreated(newProposal.id, msg.sender, targets, values, signatures, calldatas, startBlock, endTs);
+      emit ProposalCreated(newProposal.id, msg.sender, targets, values, signatures, calldatas, startBlock, endBlock);
       return newProposal.id;
   }
 
@@ -125,7 +144,7 @@ contract VoteByStake {
         Proposal storage proposal = proposals[proposalId];
         if (block.number <= proposal.startBlock) {
             return ProposalState.Pending;
-        } else if (block.timestamp <= proposal.endTs) {
+        } else if (block.number <= proposal.endBlock) {
             return ProposalState.Active;
         } else if (proposal.forVotes <= proposal.againstVotes) {
             return ProposalState.Defeated;
@@ -133,29 +152,12 @@ contract VoteByStake {
             return ProposalState.Succeeded;
         } else if (proposal.executed) {
             return ProposalState.Executed;
-        } else {  // if (block.timestamp > proposal.endTs) 
+        } else { 
             return ProposalState.Expired;
         } 
     }
 
-  function stake(uint amount) public {
-    require(myToken.transferFrom(msg.sender, address(this), amount), "E/transfer Error");
-    balances[msg.sender] += amount;
-  }
 
-  function exit(uint amount) public {
-    Proposal storage proposal = proposals[proposalCount];
-    Receipt storage receipt = proposal.receipts[msg.sender];
-    if(receipt.hasVoted) {
-      receipt.votes -= amount;
-      if (receipt.support) {
-        proposal.forVotes -=  amount;      
-      } else {
-        proposal.againstVotes -= amount;
-      }
-    }
-    myToken.transfer(msg.sender, amount);
-  }
 
   function castVote(uint proposalId, bool support) public {
     

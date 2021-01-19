@@ -2,7 +2,7 @@ pragma solidity =0.8.0;
 
 contract Protocol {
   address public owner;
-  uint public fee = 10;  // fee percent
+  uint256 public fee = 10;  // fee percent
 
   constructor() {
     owner = msg.sender;
@@ -12,7 +12,7 @@ contract Protocol {
     if (msg.sender == owner) _;
   }
 
-  function setFee(uint _fee) public onlyOwner {
+  function setFee(uint256 _fee) public onlyOwner {
     fee = _fee;
   }
 

@@ -1,9 +1,9 @@
-var MyERC20 = artifacts.require("MyERC20");
+var MyERC20WithVotes = artifacts.require("MyERC20WithVotes");
 var VoteByBalance = artifacts.require("VoteByBalance");
 
 
 module.exports = async function(deployer) {
-  let token = await MyERC20.deployed();
+  let token = await MyERC20WithVotes.deployed();
   return deployer.deploy(VoteByBalance, token.address);
 }
 

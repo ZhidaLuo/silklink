@@ -9,6 +9,7 @@
   <el-card class="margining">
     <h3>协议信息</h3>
     <p> 当前费率: {{ currFee }} </p>
+    <p> 协议合约地址: {{ protocolAddr }} </p>
     <p> 由地址 {{ ownAddr }} 治理</p>
   </el-card>
 
@@ -27,6 +28,7 @@ export default {
       account: null,
       ownAddr: null,
       currFee: null,
+      protocolAddr: null,
     }
   },
 
@@ -41,6 +43,7 @@ export default {
   methods: {
     async init() {
       this.protocol = await Proxy.getProtocol();
+      this.protocolAddr = this.protocol.address;
       this.owner();
       this.getFee();
     },
@@ -53,7 +56,7 @@ export default {
 
     getFee() {
       this.protocol.fee().then((r) => {
-        this.currFee = r.toNumber();
+        this.currFee = r.toString();
       });
     },
   }

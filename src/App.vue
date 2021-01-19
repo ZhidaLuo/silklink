@@ -1,16 +1,23 @@
 <template>
-  <div id="app">
-    <keep-alive  >
-      <router-view />
-    </keep-alive>
-  </div>
+<div id="app">
+  <keep-alive>
+    <router-view :key="key" />
+  </keep-alive>
+</div>
 </template>
 
 <script>
-
-
 export default {
   name: 'app',
+  data(){
+    return {
+    }
+	},
+	computed:{
+    key(){
+      return this.$route.path + Math.random();
+    }
+	}
 }
 </script>
 
@@ -43,6 +50,10 @@ body {
   font-size: 18px;
 }
 
+.margining p {
+    font-size: 18px;
+}
+
 .input-btns {
   display: flex;
   flex-direction: row;
@@ -53,8 +64,22 @@ body {
 .row-center {
   display: flex;
   margin-top: 4px;
+  font-size: 20px;
   flex-direction: row;
   justify-content: center;
+}
+
+.row-center div {
+  padding: 2px;
+}
+
+.row-center input {
+  font-size: 21px;
+  margin: 2px;
+}
+
+.row-center button {
+  font-size: 17px;
 }
 
 .content {
@@ -64,79 +89,5 @@ body {
   margin: 8px;
 }
 
-.content-on-tab {
-  margin-bottom: 100px;
-}
-
-.plain {
-  color: #409EFF;
-  background: #ecf5ff;
-  border-color: #b3d8ff;
-}
-
-.gold-font {
-  color: #303133;
-  font-weight: bold;
-}
-
-.card-bkg {
-  padding: 11px;
-  border-radius: 4px;
-  /* background: #f5e8c5; */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-}
-
-.gold-border {
-  border: 2px solid #DCDFE6;
-  border-radius: 5px;
-}
-
-.el-message-box__wrapper .el-message-box {
-  width: 340px;
-}
-
-
-.el-slider__button-wrapper .el-slider__button {
-  border: 2px solid #F8C200;
-}
-
-.el-slider__runway .el-slider__bar {
-  background-color: #F8C200;
-}
-
-.header {
-  height: 45px;
-  font-weight: bolder;
-  display: flex;
-  align-items: center;
-  background-color: #F8C200;
-  /*指定垂直居中*/
-}
-
-.header-title {
-  margin: 0 auto;
-}
-
-.back {
-  padding: 14px;
-}
-
-.title {
-  text-align: left;
-  margin-top: 17px;
-  margin-bottom: 15px;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-}
-
-.title img {
-  height: 19px;
-  width: 19px;
-}
-
-.title span {
-  margin-left: 6px;
-}
 
 </style>

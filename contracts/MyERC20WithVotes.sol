@@ -2,7 +2,7 @@ import "./ERC20.sol";
 import "./ERC20Detailed.sol";
 
 // DEMO 代码勿作为产品使用
-contract MyERC20WithVotes is ERC20, ERC20Detailed("A Gov Token ", "MyToken", 18) {
+contract MyERC20WithVotes is ERC20, ERC20Detailed("A Gov Token ", "MyERC20Votes", 18) {
 
 
   struct Checkpoint {

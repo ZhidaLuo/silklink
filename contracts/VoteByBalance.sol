@@ -146,6 +146,7 @@ contract VoteByBalance {
 
     // 投票票数 = 票数
     uint votes = myToken.getPriorVotes(voter, proposal.startBlock);
+
     if (support) {
         proposal.forVotes = proposal.forVotes + votes;
     } else {

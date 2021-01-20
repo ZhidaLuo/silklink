@@ -2,7 +2,7 @@ import "./ERC20.sol";
 import "./ERC20Detailed.sol";
 
 
-contract MyERC20 is ERC20, ERC20Detailed("A Normal ERC20 Token ", "MyToken", 18) {
+contract MyERC20 is ERC20, ERC20Detailed("A Normal ERC20 Token ", "MyERC20", 18) {
 
   constructor() {
     _mint(address(0x6cc67A6D136ED539d6505C545240Cf99aD1396fB), 1000e18);

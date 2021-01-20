@@ -1,9 +1,9 @@
 <template>
 <div>
   <div class="nav">
-    <el-link href="#owner"> 治理 by 管理员 </el-link> |
-    <el-link href="#stake"> 治理 by 质押投票 </el-link> |
-    <el-link href="#vote"> 治理 by 余额投票 </el-link>
+    <el-link href="#/owner"> 治理 by 管理员 </el-link> |
+    <el-link href="#/stake"> 治理 by 质押投票 </el-link> |
+    <el-link href="#/vote"> 治理 by 余额投票 </el-link>
   </div>
 
   <el-card class="margining">

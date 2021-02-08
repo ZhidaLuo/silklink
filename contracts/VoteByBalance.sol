@@ -5,7 +5,7 @@ import "./IERC20WithVotes.sol";
 // DEMO 代码勿作为产品使用
 contract VoteByBalance {
 
-  IERC20WithVotes public immutable myToken;
+  IERC20WithVotes public immutable Silk;
 
   uint public proposalCount;
 
@@ -49,7 +49,7 @@ contract VoteByBalance {
   }
 
   constructor(IERC20WithVotes token) {
-    myToken = token;
+    Silk = token;
   }
 
   // 提案（提交执行对象与动作）
@@ -145,7 +145,7 @@ contract VoteByBalance {
     require(receipt.hasVoted == false, "voter already voted");
 
     // 投票票数 = 票数
-    uint votes = myToken.getPriorVotes(voter, proposal.startBlock);
+    uint votes = Silk.getPriorVotes(voter, proposal.startBlock);
 
     if (support) {
         proposal.forVotes = proposal.forVotes + votes;

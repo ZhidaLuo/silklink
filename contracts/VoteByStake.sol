@@ -5,7 +5,7 @@ import "./IERC20.sol";
 // DEMO 代码勿作为产品使用
 contract VoteByStake {
 
-  IERC20 public immutable myToken;
+  IERC20 public immutable Silk;
 
   mapping(address => uint) public balances;
 
@@ -51,11 +51,11 @@ contract VoteByStake {
   }
 
   constructor(IERC20 token) {
-    myToken = token;
+    Silk = token;
   }
 
   function stake(uint amount) public {
-    require(myToken.transferFrom(msg.sender, address(this), amount), "E/transfer Error");
+    require(Silk.transferFrom(msg.sender, address(this), amount), "E/transfer Error");
     balances[msg.sender] += amount;
   }
 
@@ -70,7 +70,7 @@ contract VoteByStake {
         proposal.againstVotes -= amount;
       }
     }
-    myToken.transfer(msg.sender, amount);
+    Silk.transfer(msg.sender, amount);
   }
 
   // 提案（提交执行对象与动作）
